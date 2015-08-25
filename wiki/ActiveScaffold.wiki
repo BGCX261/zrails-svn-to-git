@@ -1,0 +1,12 @@
+#Active scaffold
+
+= Introduction =
+
+Use current code to run Active Scaffold for classes App_Model_News /App_Model_Categories
+
+{{{
+class AdminController extends Core_Controller_AdminController
+{
+    protected $_autoform_scaffold_classes = array('App_Model_News', 'App_Model_Categories');
+}
+}}}

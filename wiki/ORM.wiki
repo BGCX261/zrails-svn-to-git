@@ -1,0 +1,105 @@
+#ORM(Object-relational mapping)
+
+= Связь 1 ко многим =
+Products -> Products_Types (продукт имеет 1 тип из множества)
+Поле 'type' таблицы Products содержит значение поля 'id' таблицы 'App_Model_Products_Types'
+{{{
+class App_Model_Products extends Core_Model_Models
+{
+    protected $_referenceMap    = array(
+        'key' => array(
+            'columns'           => array('type'),
+            'refTableClass'     => 'App_Model_Products_Types',
+            'refColumns'        => array('id'),
+        ));
+}
+class App_Model_Products_Types extends Core_Model_Models
+{
+}
+
+// получить тип продукта
+$Products = new App_Model_Products();
+$Product = $Products->fetchById(1);
+$Product->findParentProducts_Types();
+
+// получить все продукты данного типа
+$Products_Types = new App_Model_Products_Types();
+$Product_Type = $Products_Types->fetchById(1);
+$Product_Type->findProducts();
+}}}
+
+
+= Связь многие ко многим =
+Сategories -> Categories_News -> News
+
+Категории связаны с новостями через таблицу Categories_News, имеющую двойной ключ "genre_id", "сategory_id"
+{{{
+class App_Model_Categories extends Core_Model_Models
+{
+    protected $_manyToManyTables = array(
+		"App_Model_News" => "App_Model_Categories_News",
+	);
+}
+
+class App_Model_Categories_News extends Core_Model_Models
+{
+	protected $_primary = array("genre_id", "сategory_id");
+
+	protected $_referenceMap    = array(
+        'Model1' => array(
+            'columns'           => array('category_id'),
+            'refTableClass'     => 'App_Model_Categories',
+            'refColumns'        => array('id')
+        ),
+        'Model2' => array(
+            'columns'           => array('news_id'),
+            'refTableClass'     => 'App_Model_News',
+            'refColumns'        => array('id')
+        )
+    );
+}
+
+class App_Model_News extends Core_Model_Models
+{
+    protected $_manyToManyTables = array(
+                "App_Model_Categories" => "App_Model_Categories_News",
+    );	
+}
+
+//получить все новости свзанные с категорией
+$Categories = new App_Model_Categories();
+$Category = $Categories->fetchById(1);
+$Category->findNews();
+
+//получить все категории в которые входит новость
+$News = new App_Model_News();
+$NewsItem = $News->fetchById();
+$NewsItem->findCategories();
+
+}}}
+
+
+= Условия в связях = 
+
+Products -> Products_Types (продукт имеет 1 тип из множества)
+Поле 'type' таблицы Products содержит значение поля 'id' таблицы 'App_Model_Products_Types'
+{{{
+class App_Model_Products extends Core_Model_Models
+{
+    protected $_referenceMap    = array(
+        'key' => array(
+            'columns'           => array('type'),
+            'refTableClass'     => 'App_Model_Products_Types',
+            'refColumns'        => array('id'),
+            'where'             => 'status=0'
+        ));
+}
+class App_Model_Products_Types extends Core_Model_Models
+{
+}
+
+// получить все продукты данного типа с условием, что status=0
+$Products_Types = new App_Model_Products_Types();
+$Product_Type = $Products_Types->fetchById(1);
+$Product_Type->findProducts();
+}}}

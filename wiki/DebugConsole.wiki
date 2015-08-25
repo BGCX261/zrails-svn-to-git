@@ -1,0 +1,50 @@
+= Отладочная консоль =
+  * предоставляет возможность отладки в режиме реального времени
+  * возможность выбора окружения для запуска консоли Development, Test, Production 
+  * поддерживает Zend_Autoload для файлов проекта
+  * поддерживает include/require
+
+*Внимание! По-умолчанию, отладочная консоль открывается в режиме Development окружения*
+
+*Внимание! Синтаксис языка php, каждая языковая конструкция должна закачиватся знаком ";" (пример ниже)*
+
+= Пример использования = 
+Запуск консоли к режиме Development:
+{{{
+./console
+}}}
+
+Запуск консоли к режиме Test:
+{{{
+./console Test
+}}}
+
+Запуск консоли к режиме Production:
+{{{
+./console Production
+}}}
+
+= Пример работы с консолью =
+{{{
+necromant@necromant$ ./console 
+Loading development environment (Zrails)
+php> $a=1;
+php> $b=2;
+php> echo "$a+$b=".($a+$b); 
+1+2=3
+php> Zend_Debug::dump(Zend_Registry::get("config")->Database->toArray());
+array(2) {
+  ["Adapter"] => string(9) "Pdo_Mysql"
+  ["Options"] => array(4) {
+    ["host"] => string(9) "127.0.0.1"
+    ["username"] => string(4) "root"
+    ["password"] => string(0) ""
+    ["dbname"] => string(5) "devel"
+  }
+}
+php> exit;                           
+necromant@necromant$ 
+}}} 
+
+= Выход из консоли =
+Для того чтоб выйти достаточно ввести exit;

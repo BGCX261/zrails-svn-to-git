@@ -1,0 +1,51 @@
+#Пример миграций
+
+= Создание(удаление) таблицы =
+Файл Db/Migration/001_create_table_users.php
+{{{
+class Db_Migration_1 extends Core_Db_Schema_Change 
+{
+	public function up()
+	{
+		$this->table("users")
+			->addColumn("login", Core_Db_Schema_Table::COLUMN_STRING)
+			->addColumn("password", Core_Db_Schema_Table::COLUMN_STRING)
+			->addColumn("active", Core_Db_Schema_Table::COLUMN_INTEGER)
+			->create();
+	}
+	
+	public function down()
+	{
+		$this->table("users")->drop();
+	}
+}
+}}}
+
+= Изменение таблицы users =
+Файл Db/Migration/002_add_field_email_and_unique_index_by_login_and_email.php
+{{{
+class Db_Migration_2 extends Core_Db_Schema_Change 
+{
+	public function up()
+	{
+		$this->table("users")
+			->addIndex("login", array('login'), Core_Db_Schema_Table::INDEX_UNIQUE)
+			->addColumn("email", Core_Db_Schema_Table::COLUMN_STRING)
+			->addIndex("email", array('email'), Core_Db_Schema_Table::INDEX_UNIQUE)
+			->addIndex("login_password", array('login', 'password'), Core_Db_Schema_Table::INDEX_UNIQUE)
+			->save();
+
+	
+	public function down()
+	{
+		$this->table("users")
+			->dropIndex('email')
+			->dropIndex('login')
+			->dropIndex('login_password')
+			->dropColumn('email')
+			->save();
+	}
+}
+}}}
+
+

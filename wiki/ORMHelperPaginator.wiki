@@ -1,0 +1,29 @@
+#Core_View_Helper_Paginator
+
+= Introduction =
+
+Paginator is a flexible component for paginating collections of data and presenting that data to users.
+
+
+= Details =
+example use
+{{{
+// page = 1
+// items per page = 10
+<?$News = new App_Model_News()?>
+<? $NewsItems = $News->fetchAllPage("1", 1, 10);?>
+<?=$this->paginator($NewsItems)?>
+}}}
+
+full interface
+{{{
+paginator(Core_Model_PageRowset $Rowset, $type="All", $view_script="paginator")
+}}}
+
+|| *Type* || Description || 
+|| All || Returns every page. This is useful for dropdown menu pagination controls with  relatively few pages. In these cases, you want all pages available to the user at once. ||
+|| Elastic || A Google-like scrolling style that expands and contracts as a user scrolls through the pages.||
+|| Jumping || As users scroll through, the page number advances to the end of a given range, then starts again at the beginning of the new range. ||
+|| Sliding || A Yahoo!-like scrolling style that positions the current page number in the center of the page range, or as close as possible. This is the default style. ||
+
+$view_script - view script to show paginator see example [http://framework.zend.com/manual/en/zend.paginator.usage.html zend.paginator.usage.html]

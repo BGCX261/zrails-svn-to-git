@@ -1,0 +1,60 @@
+#Служебные команды
+Script/pake.php - выполнение служебных операций
+Script/test.php - запуск тестов
+
+---
+
+= Script/pake.php - кодо-генератор =
+Генерация контроллера news
+{{{
+php -f Script/pake.php generate:controller news
+}}}
+
+Генерация модели news
+{{{
+php -f Script/pake.php generate:model news
+}}}
+
+Генерация вида для действия info, контроллера users
+{{{
+php -f Script/pake.php generate:view_script users info
+}}}
+
+Генерация шаблона rss
+{{{
+php -f Script/pake.php generate:view_layout rss
+}}}
+
+= Script/pake.php - миграции БД =
+Получить информацию о текущей версии схемы БД
+{{{
+php -f Script/pake.php db:current_shema_version
+}}}
+
+Cоздать файл миграции с комментарием change news add field
+{{{
+php -f Script/pake.php generate:migration "change news add field"
+}}}
+
+Сброс всех измений, откат на 0 ревизию БД
+{{{
+php -f Script/pake.php db:reset
+}}}
+
+Применение или откат схемы БД до 7 ревизии.
+{{{
+php -f Script/pake.php db:migration 7
+}}}
+
+Обновление схемы БД до последней версии
+{{{
+php -f Script/pake.php db:migration
+}}}
+
+----
+
+= Script/test.php - запуск автоматического тестования =
+Пример
+{{{
+php -f Script/test.php
+}}}

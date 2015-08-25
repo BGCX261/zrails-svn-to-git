@@ -1,0 +1,47 @@
+#генерация форм из моделей
+
+= Генерация форм из моделей =
+В качестве примера возьмем класс News описанный в разделе[ORM ORM]
+{{{
+$News = new App_Model_News();
+$Form = $NewsItem = $News->findById(5)->buildForm();
+if (!empty($_POST) && $Form->isValid($_POST)) {
+  // success!
+} else {
+  //failed!
+}
+}}}
+
+$Form - объект [http://framework.zend.com/manual/en/zend.form.html Zend_Form].
+{{{
+//Для получения данных используйте
+$Form->getValues();
+
+//Для сохрания данных в модели используйте
+//сохраняются, обновлюятся и поддерживаются связи
+$News = new App_Model_News();
+$Form = $NewsItem = $News->findById(5)->buildForm();
+if (!empty($_POST) && $Form->isValid($_POST)) {
+  // success!
+  $NewsItem->setFromArray($Form->getValues())->save();
+} else {
+  //failed!
+}
+}}}
+
+= Сокрытие полей в форме = 
+Пример в новостях требутеся скрыть поле editor_id, count_symbols вычисляемые автоматически
+{{{
+$News = new App_Model_News();
+$Form = $NewsItem = $News->findById(5)->buildForm(array("hide"=>array("editor_id", "count_symbols")));
+}}}
+
+= Перевод названий полей =
+Переведм поля date, title
+{{{
+$News = new App_Model_News();
+$Form = $NewsItem = $News->findById(5)->buildForm(array("translate"=>array("date"=>"Дата публикации", "title"=>"Заголовок")));
+}}}
+
+P.S. Генерация формы происходит на оновании данных полученых из описания таблицы в БД. Автоматически применяются имеющие в БД ограниения на длину поля и тип вводимых данных.
+Тоесть для поля типа INT будет установлена проверка на соотвествие введенного пользователем значения типу INT.

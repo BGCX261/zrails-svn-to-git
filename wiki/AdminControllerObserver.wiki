@@ -1,0 +1,94 @@
+= Observer =
+
+Добавление возможности прикреплять картинку к статье.
+
+{{{
+class AdminController extends Core_Controller_AdminController
+{
+	protected $_autoform_scaffold_classes = array(
+		'App_Model_Articles',
+	);
+	
+	public function init()
+	{
+		parent::init();
+		
+                $config = array(
+			//папка для сохранения картинок
+			"path"      => $config["Public"]["Path"]."/images/articles/store",
+		    	//папка куда созраняются загруженніе картинки  по-умолчанию
+			"tmp_path"	=> "/tmp/",
+			//тип картинки 
+		    	"type"      => Core_Image::TYPE_JPG,
+                        // размер к котому уменьшать картинки(с сохранением пропорций)
+			"size_x"    => 85,
+			"size_y"    => 85,
+                        //качество в % от 0 до 100
+		    	"quality"	=> 90,
+                        // разширение целевого файла( по маске $Object-id.extension)
+		    	"extention" => "jpg",
+		);
+
+		//создание наблюдателя реагирующего толкьо на обекты типа App_Model_Articles
+		$Observer = new Core_Subject_Observer_ImageSave(new App_Model_Articles());
+		//конфигурирование
+                $Observer->setOptions($config);
+                // добавление наблюдателя под именем "Img" в колекцю наблюдателей
+		$this->_Subject->attach("Img", $Observer);
+	}
+}
+}}}
+
+Добавляем в модель App_Model_Articles допонительные поля
+{{{
+class App_Model_Articles extends Core_Model_Models
+{
+	protected $_additional_fields = array(
+                // название поля "image"
+		"image" => array(
+                        // типа поля File, Text, TextArea, Select
+			"Type" => "file",
+			// опции
+                        "Options" => array()
+                        // все параметрі можно посмотреть пр создании елемента формы
+                        // Zend_Fotm::addElement($type, $name, $options)
+		)
+	);
+}
+}}}
+Все после этого в конеце формы для ректирования статьи появится поле для выбора картинки. После выбора каринка созраняется в указанной папке с маской $Object-id.extension, предварительно уменьшеной до нужно размера с сохранением пропорций.
+
+= Создавние кастомных наблюдателей = 
+Вы можете создавать кастомные наблбдатели сами, для этого требутеся наследовать Core_Subject_Observer_Abstract
+и определеить методы
+{{{
+abstract class Core_Subject_Observer_Abstract
+{
+    protected $_Models = null;
+    protected $_Config = null;
+
+    // метод вызывается перед сохранением объекта (для создаваемого объекта, $Obj->isNotvalid())
+    // $Obj - текущий удаляемый объект
+    // $params - входяшие данные из формы
+    public function preEditsave(Core_Model_Model $Obj=null, Array $params=array())   
+
+
+    // метод вызывается после сохранения объекта
+    // $Obj - текущий удаляемый объект
+    // $params - входяшие данные из формы
+    public function postEditsave(Core_Model_Model $Obj=null, Array $params=array())   
+   
+    // метод вызывается перед удалением
+    // $Obj -  текущий удаляемый объект
+    // $params - входяшие данные из формы
+    public function preDelete(Core_Model_Model $Obj=null, Array $params=array())
+
+    // метод вызывается после удаления
+    // $Obj    -  текущий удаляемый объект
+    // $params - входяшие данные из формы
+    public function postDelete(Core_Model_Model $Obj=null, Array $params=array())
+
+}
+}}}
+
+Переопредяля в наледумом классе любой из этих метод можно добится нужно поведения.

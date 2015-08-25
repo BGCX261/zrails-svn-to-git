@@ -1,0 +1,32 @@
+= Project structure =
+
+ * *App* - _all user aplication_
+  * *Controller* -  _colntroler folder_
+  * *Model* - _user model with mapping to db:table_
+  * *View* - _view_
+     * *Helper* - _view helpers_
+     * *Script* - _view templates_
+ * *Config* - _configs_
+ * *Db* - _folder to db:migration_ 
+   * *Migration* - _folder with more db:migration files_
+ * *Doc* - _project documentation_
+ * *Log* - _projects logs_
+ * *Public* - _root directory www-server_
+ * *Script* - _console running script and daemons_
+ * *Test* - _folder to tests_
+   * *Composite* - _composite tests_
+   * *File* - _test files_ 
+   * *Fixtures* - _db fixtures to Unit and Composite testing_
+   * *Functional* - _test to user controllers_
+   * *Mock* - _mocks_
+   * *Unit* - _simple unit-tests_
+ * *Tmp* - _folder to temporary data_
+   * *Cache* - _cached data_
+   * *Lock* - _process locks_
+   * *Pid* - _process pids_
+   * *Session* - _application session_
+   * *Socket* - _opened sockets_
+ * *Vendor* - _3-th party class library_
+   * *Core* - _core of zrails_
+   * *Simpletest* - _simple unit testing classes_
+   * *Zend* - _zend framework_
